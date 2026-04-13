@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="theme-color" content="#07090E"/>
+<link rel="manifest" href="manifest.json"/>
+<title>BGMI Booster — Krishan Mohan</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --or:#FF6A00;--gr:#00E59B;--re:#FF3355;--ye:#FFD700;--bl:#00AAFF;--pu:#CC44FF;--cy:#00E5FF;
+  --bg:#07090E;--card:#0F1520;--card2:#141C2A;--bdr:#1C2A3C;--bdr2:#243040;
+  --tx:#C8D8E8;--dim:#4A6070;--dim2:#6A8090;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--tx);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden;padding-bottom:80px}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,106,0,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,106,0,0.018) 1px,transparent 1px);background-size:30px 30px;pointer-events:none;z-index:0}
+.w{position:relative;z-index:1;max-width:520px;margin:0 auto}
+
+/* ── HEADER ── */
+.hdr{background:linear-gradient(180deg,#0B0F18,var(--bg));border-bottom:1px solid var(--bdr);padding:13px 16px 0;position:sticky;top:0;z-index:200;backdrop-filter:blur(14px)}
+.hr1{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.dot-row{display:flex;align-items:center;gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--or);box-shadow:0 0 9px var(--or);animation:blink 1.6s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.25}}
+.dtag{font-family:'Orbitron',monospace;font-size:8px;color:var(--or);letter-spacing:2px}
+.bp{background:var(--card);border:1px solid var(--bdr);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--gr);font-family:'Orbitron',monospace}
+.title{font-family:'Orbitron',monospace;font-size:clamp(15px,5vw,21px);font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,#FF6A00,#FFD044);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{font-size:11px;color:var(--dim2);margin-bottom:10px}
+
+/* ── TABS ── */
+.tabs{display:flex;margin:0 -16px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--bdr)}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:9px 11px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--dim);font-family:'Orbitron',monospace;font-size:8px;letter-spacing:1px;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+.tab.active{color:var(--or);border-bottom-color:var(--or)}
+
+/* ── TAB CONTENT ── */
+.tc{display:none;padding:12px 16px;animation:up 0.22s ease}
+.tc.active{display:block}
+@keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── ENABLE ALL BUTTON ── */
+.eaf-btn{width:100%;padding:16px;border:none;border-radius:14px;background:linear-gradient(135deg,#00E59B,#00AAFF,#CC44FF);color:#fff;font-family:'Orbitron',monospace;font-size:12px;font-weight:900;letter-spacing:2px;cursor:pointer;box-shadow:0 5px 28px rgba(0,229,155,0.35);transition:all 0.2s;margin-bottom:11px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:8px}
+.eaf-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.07),transparent);pointer-events:none}
+.eaf-btn.all-on{background:linear-gradient(135deg,#FF3355,#FF6A00,#FFD700);box-shadow:0 5px 28px rgba(255,51,85,0.4)}
+.eaf-btn:active{transform:scale(0.98)}
+.eaf-badge{background:rgba(255,255,255,0.2);border-radius:20px;padding:2px 9px;font-size:10px;letter-spacing:1px}
+@keyframes pulse-ring{0%{box-shadow:0 5px 28px rgba(0,229,155,0.35)}50%{box-shadow:0 5px 35px rgba(0,229,155,0.6)}100%{box-shadow:0 5px 28px rgba(0,229,155,0.35)}}
+.eaf-btn:not(.all-on){animation:pulse-ring 2.5s infinite}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:14px;margin-bottom:12px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,106,0,0.2),transparent)}
+.ct{font-family:'Orbitron',monospace;font-size:9px;color:var(--or);letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+
+/* ── HOME LIVE STATS ── */
+.live-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+.live-box{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:13px;position:relative;overflow:hidden;cursor:default}
+.live-box::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,106,0,0.04),transparent);pointer-events:none}
+.lb-icon{font-size:18px;margin-bottom:6px}
+.lb-val{font-family:'Orbitron',monospace;font-size:18px;font-weight:900;line-height:1;margin-bottom:3px;transition:all 0.5s}
+.lb-label{font-size:10px;color:var(--dim2);letter-spacing:1px;margin-bottom:4px}
+.lb-bar{height:3px;background:var(--bdr);border-radius:3px;overflow:hidden}
+.lb-fill{height:100%;border-radius:3px;transition:width 0.8s ease}
+.lb-status{font-size:9px;margin-top:4px;font-family:'Orbitron',monospace;letter-spacing:0.5px}
+
+/* 3-col mini stats */
+.mini-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px}
+.ms{background:var(--card2);border:1px solid var(--bdr);border-radius:10px;padding:9px;text-align:center}
+.ms-val{font-family:'Orbitron',monospace;font-size:14px;font-weight:900;color:var(--or)}
+.ms-lbl{font-size:9px;color:var(--dim2);letter-spacing:0.5px;margin-top:2px}
+
+/* Active feat counter */
+.feat-counter{background:var(--card2);border:1px solid var(--bdr);border-radius:12px;padding:12px;margin-bottom:12px;display:flex;align-items:center;gap:12px}
+.fc-num{font-family:'Orbitron',monospace;font-size:30px;font-weight:900;color:var(--or);line-height:1;flex-shrink:0}
+.fc-info{flex:1}
+.fc-title{font-size:14px;font-weight:700}
+.fc-sub{font-size:11px;color:var(--dim2);margin-top:1px}
+.fc-prog{height:4px;background:var(--bdr);border-radius:4px;margin-top:7px;overflow:hidden}
+.fc-fill{height:100%;background:linear-gradient(90deg,var(--or),#FFD044);border-radius:4px;transition:width 0.4s}
+
+/* ── BOOST & LAUNCH ── */
+.boost-btn{width:100%;padding:15px;border:none;border-radius:14px;background:linear-gradient(135deg,#FF6A00,#EE0979);color:#fff;font-family:'Orbitron',monospace;font-size:13px;font-weight:700;letter-spacing:2px;cursor:pointer;box-shadow:0 5px 22px rgba(255,106,0,0.4);transition:all 0.18s;margin-bottom:9px}
+.boost-btn:active{transform:scale(0.98)}
+.boost-btn:disabled{opacity:0.5}
+.boost-prog{height:5px;background:var(--bdr);border-radius:4px;overflow:hidden;margin-bottom:8px;display:none}
+.bp-fill{height:100%;background:linear-gradient(90deg,var(--or),#EE0979);border-radius:4px;box-shadow:0 0 10px var(--or);transition:width 0.35s}
+.bs{text-align:center;font-size:11px;color:var(--or);font-family:'Orbitron',monospace;letter-spacing:1px;min-height:16px;margin-bottom:7px}
+.launch-btn{width:100%;padding:14px;border:1px solid #2A6040;border-radius:14px;background:linear-gradient(135deg,#0F2A1A,#0A1A10);color:#fff;font-family:'Orbitron',monospace;font-size:13px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:all 0.18s}
+.launch-btn:active{transform:scale(0.98)}
+.done-box{background:rgba(0,229,155,0.06);border:1px solid rgba(0,229,155,0.25);border-radius:12px;padding:15px;text-align:center;display:none;margin-bottom:10px}
+.done-box .de{font-size:28px;margin-bottom:5px}
+.done-box .dt{font-family:'Orbitron',monospace;color:var(--gr);font-size:11px;letter-spacing:2px;margin-bottom:3px}
+.done-box .ds{font-size:12px;color:var(--dim2)}
+.rst{margin-top:9px;background:transparent;border:1px solid var(--bdr);color:var(--dim2);padding:6px 16px;border-radius:8px;cursor:pointer;font-size:11px}
+
+/* ── TOGGLES ── */
+.tr{display:flex;align-items:center;gap:10px;padding:9px 6px;border-bottom:1px solid rgba(28,42,60,0.6);border-radius:6px;transition:background 0.2s}
+.tr:last-child{border-bottom:none}
+.tr.on{background:rgba(255,106,0,0.05)}
+.tl{flex:1}
+.tn{font-size:13px;font-weight:600;color:var(--tx);line-height:1.2}
+.td{font-size:10px;color:var(--dim2);margin-top:2px}
+.tbadge{display:inline-block;font-size:7px;font-family:'Orbitron',monospace;padding:1px 5px;border-radius:3px;margin-left:4px;vertical-align:middle}
+.b-sd{background:#00AAFF14;color:#00AAFF;border:1px solid #00AAFF30}
+.b-new{background:#FFD70014;color:#FFD700;border:1px solid #FFD70030}
+.b-hot{background:#FF335514;color:#FF3355;border:1px solid #FF335530}
+.b-ai{background:#CC44FF14;color:#CC44FF;border:1px solid #CC44FF30}
+.tog{position:relative;width:44px;height:24px;flex-shrink:0}
+.tog input{opacity:0;width:0;height:0;position:absolute}
+.ts{position:absolute;inset:0;background:#141C2A;border-radius:24px;cursor:pointer;transition:all 0.25s;border:1px solid var(--bdr2)}
+.ts::before{content:'';position:absolute;width:18px;height:18px;left:2px;bottom:2px;background:#2A3A4A;border-radius:50%;transition:all 0.25s}
+.tog input:checked+.ts{background:rgba(255,106,0,0.18);border-color:var(--or);box-shadow:0 0 8px rgba(255,106,0,0.25)}
+.tog input:checked+.ts::before{transform:translateX(20px);background:var(--or);box-shadow:0 0 8px rgba(255,106,0,0.5)}
+.aim-tog input:checked+.ts{background:rgba(255,51,85,0.15);border-color:var(--re);box-shadow:0 0 8px rgba(255,51,85,0.2)}
+.aim-tog input:checked+.ts::before{background:var(--re);box-shadow:0 0 8px rgba(255,51,85,0.5)}
+.inp-tog input:checked+.ts{background:rgba(0,229,255,0.12);border-color:var(--cy);box-shadow:0 0 8px rgba(0,229,255,0.2)}
+.inp-tog input:checked+.ts::before{background:var(--cy);box-shadow:0 0 8px rgba(0,229,255,0.4)}
+.ai-tog input:checked+.ts{background:rgba(204,68,255,0.15);border-color:var(--pu);box-shadow:0 0 8px rgba(204,68,255,0.25)}
+.ai-tog input:checked+.ts::before{background:var(--pu);box-shadow:0 0 8px rgba(204,68,255,0.5)}
+.pr-tog input:checked+.ts{background:rgba(204,68,255,0.18);border-color:#CC44FF;box-shadow:0 0 8px rgba(204,68,255,0.3)}
+.pr-tog input:checked+.ts::before{background:#CC44FF;box-shadow:0 0 8px rgba(204,68,255,0.6)}
+.fr-tog input:checked+.ts{background:rgba(0,229,155,0.12);border-color:var(--gr);box-shadow:0 0 8px rgba(0,229,155,0.2)}
+.fr-tog input:checked+.ts::before{background:var(--gr);box-shadow:0 0 8px rgba(0,229,155,0.4)}
+
+/* ── SELECT ALL ── */
+.sab{background:rgba(255,106,0,0.1);border:1px solid rgba(255,106,0,0.25);color:var(--or);padding:3px 10px;border-radius:6px;font-size:8px;font-family:'Orbitron',monospace;cursor:pointer;letter-spacing:1px;white-space:nowrap;flex-shrink:0;transition:all 0.15s}
+.sab.on{background:rgba(255,106,0,0.2);border-color:var(--or)}
+
+/* ── INFO BOXES ── */
+.ib{border-radius:10px;padding:11px;margin-bottom:12px}
+.ib.or{background:rgba(255,106,0,0.07);border:1px solid rgba(255,106,0,0.18)}
+.ib.gr{background:rgba(0,229,155,0.07);border:1px solid rgba(0,229,155,0.18)}
+.ib.bl{background:rgba(0,170,255,0.07);border:1px solid rgba(0,170,255,0.18)}
+.ib.re{background:rgba(255,51,85,0.07);border:1px solid rgba(255,51,85,0.18)}
+.ib.pu{background:rgba(204,68,255,0.07);border:1px solid rgba(204,68,255,0.18)}
+.ib-t{font-family:'Orbitron',monospace;font-size:9px;letter-spacing:1px;margin-bottom:5px}
+.ib.or .ib-t{color:var(--or)}.ib.gr .ib-t{color:var(--gr)}.ib.bl .ib-t{color:var(--bl)}.ib.re .ib-t{color:var(--re)}.ib.pu .ib-t{color:var(--pu)}
+.ib p{font-size:12px;color:#9AB;line-height:1.5}
+.ib strong{color:var(--tx)}
+
+/* ── PREMIUM CARD ── */
+.prem-card{background:linear-gradient(135deg,#180A2C,#0A1818);border:1px solid #7730AA;border-radius:14px;padding:14px;margin-bottom:12px;position:relative;overflow:hidden}
+.prem-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,#CC44FF,#00E59B,#FFD700)}
+.prem-card::after{content:'👑 PREMIUM';position:absolute;top:10px;right:12px;font-family:'Orbitron',monospace;font-size:7px;color:#FFD700;letter-spacing:2px;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);padding:2px 8px;border-radius:10px}
+.prem-tr{display:flex;align-items:center;gap:10px;padding:9px 6px;border-bottom:1px solid rgba(204,68,255,0.1);border-radius:6px;transition:background 0.2s}
+.prem-tr:last-child{border-bottom:none}
+.prem-tr.on{background:rgba(204,68,255,0.06)}
+
+/* aim / inp / fr / hit / ai / bgmi cards */
+.aim-card{background:linear-gradient(135deg,#1A0A0A,#0A0A14);border:1px solid rgba(255,51,85,0.3);border-radius:14px;padding:14px;margin-bottom:12px;position:relative;overflow:hidden}
+.aim-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#FF3355,#FF6A00,transparent)}
+.aim-card::after{content:'🎯 AIM ENGINE';position:absolute;top:10px;right:12px;font-family:'Orbitron',monospace;font-size:7px;color:var(--re);letter-spacing:1.5px;background:rgba(255,51,85,0.1);border:1px solid rgba(255,51,85,0.3);padding:2px 7px;border-radius:10px}
+.inp-card{background:linear-gradient(135deg,#0A141A,#050E14);border:1px solid rgba(0,229,255,0.25);border-radius:14px;padding:14px;margin-bottom:12px;position:relative;overflow:hidden}
+.inp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#00E5FF,transparent)}
+.inp-card::after{content:'⚡ INPUT ENGINE';position:absolute;top:10px;right:12px;font-family:'Orbitron',monospace;font-size:7px;color:var(--cy);letter-spacing:1.5px;background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.25);padding:2px 7px;border-radius:10px}
+.fr-card{background:linear-gradient(135deg,#0A1A0A,#050E0A);border:1px solid rgba(0,229,155,0.25);border-radius:14px;padding:14px;margin-bottom:12px;position:relative;overflow:hidden}
+.fr-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#00E59B,transparent)}
+.fr-card::after{content:'🎮 FRAME ENGINE';position:absolute;top:10px;right:12px;font-family:'Orbitron',monospace;font-size:7px;color:var(--gr);letter-spacing:1.5px;background:rgba(0,229,155,0.08);border:1px solid rgba(0,229,155,0.25);padding:2px 7px;border-radius:10px}
+.hit-card{background:linear-gradient(135deg,#0A1A0A,#0A0A1A);border:1px solid rgba(0,229,155,0.3);border-radius:14px;padding:14px;margin-bottom:12px;position:relative;overflow:hidden}
+.hit-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#00E59B,#00AAFF,transparent)}
+.hit-card::after{content:'🔥 HIT SYNC';position:absolute;top:10px;right:12px;font-family:'Orbitron',monospace;font-size:7px;color:var(--gr);letter-spacing:1.5px;background:rgba(0,229,155,0.08);border:1px solid rgba(0,229,155,0.25);padding:2px 7px;border-radius:10px}
+.ai-card{background:linear-gradient(135deg,#120A1E,#0A0E18);border:1px solid rgba(204,68,255,0.25);border-radius:14px;padding:14px;margin-bottom:12px;position:relative;overflow:hidden}
+.ai-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#CC44FF,#00AAFF,transparent)}
+.ai-card::after{content:'🧠 AI ENGINE';position:absolute;top:10px;right:12px;font-family:'Orbitron',monospace;font-size:7px;color:var(--pu);letter-spacing:1.5px;background:rgba(204,68,255,0.08);border:1px solid rgba(204,68,255,0.25);padding:2px 7px;border-radius:10px}
+
+/* ── GAMES ── */
+.game-card{display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--bdr);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.gi{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0;background:rgba(255,106,0,0.12)}
+.ginfo{flex:1;min-width:0}
+.gn{font-size:14px;font-weight:700}
+.gp{font-size:9px;color:var(--dim2);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gbtns{display:flex;gap:6px;flex-shrink:0}
+.gl{background:linear-gradient(135deg,#FF6A00,#FF9500);border:none;color:#fff;padding:7px 11px;border-radius:8px;font-family:'Orbitron',monospace;font-size:9px;cursor:pointer;letter-spacing:1px}
+.gd{background:rgba(255,51,85,0.15);border:1px solid rgba(255,51,85,0.3);color:var(--re);padding:7px 9px;border-radius:8px;font-size:12px;cursor:pointer}
+
+/* ── APP LOCK ── */
+.ar{display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--bdr);border-radius:10px;padding:10px 12px;margin-bottom:7px}
+.aic{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:rgba(255,51,85,0.08)}
+.an{font-size:13px;font-weight:700}
+.acat{font-size:10px;color:var(--dim2);margin-top:1px}
+
+/* ── MODAL ── */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.94);z-index:500;flex-direction:column}
+.modal.open{display:flex}
+.mh{background:var(--card);border-bottom:1px solid var(--bdr);padding:14px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.mt{font-family:'Orbitron',monospace;font-size:12px;color:var(--or);letter-spacing:1px;flex:1}
+.mc{background:rgba(255,51,85,0.2);border:1px solid rgba(255,51,85,0.4);color:var(--re);width:32px;height:32px;border-radius:8px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ms-wrap{background:var(--card);border-bottom:1px solid var(--bdr);padding:10px 16px;flex-shrink:0}
+.ms-wrap input{width:100%;background:var(--card2);border:1px solid var(--bdr2);border-radius:10px;padding:10px 14px;color:var(--tx);font-family:'Rajdhani',sans-serif;font-size:14px;outline:none}
+.ms-wrap input:focus{border-color:var(--or)}
+.ml{flex:1;overflow-y:auto;padding:8px 16px}
+.mi{display:flex;align-items:center;gap:12px;padding:11px;background:var(--card2);border:1px solid var(--bdr);border-radius:10px;margin-bottom:7px;transition:all 0.15s}
+.mi:active{background:rgba(255,106,0,0.08);border-color:var(--or)}
+.mi.added{border-color:var(--gr);background:rgba(0,229,155,0.04)}
+.mi.blocked{border-color:var(--re);background:rgba(255,51,85,0.04)}
+.mii{font-size:26px;width:38px;text-align:center;flex-shrink:0}
+.minfo{flex:1;min-width:0}
+.mn{font-size:14px;font-weight:700}
+.mcat{font-size:10px;color:var(--dim2)}
+.madd{background:var(--or);border:none;color:#fff;padding:6px 13px;border-radius:8px;font-family:'Orbitron',monospace;font-size:9px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.chk{width:24px;height:24px;border-radius:6px;border:2px solid var(--bdr2);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.18s;flex-shrink:0;font-size:13px}
+.chk.on{background:var(--re);border-color:var(--re);color:#fff;box-shadow:0 0 7px rgba(255,51,85,0.4)}
+
+/* ── MANUAL ADD BOX ── */
+.manual-add-box{background:rgba(0,229,155,0.05);border:1px solid rgba(0,229,155,0.2);border-radius:12px;padding:13px;margin:0 0 10px}
+.manual-add-box .mat{font-family:'Orbitron',monospace;font-size:9px;color:var(--gr);letter-spacing:1px;margin-bottom:9px}
+.manual-add-box input{width:100%;background:var(--card);border:1px solid var(--bdr2);border-radius:9px;padding:9px 12px;color:var(--tx);font-family:'Rajdhani',sans-serif;font-size:13px;outline:none;margin-bottom:7px}
+.manual-add-box input:focus{border-color:var(--gr)}
+.manual-add-box button{width:100%;padding:10px;border:none;border-radius:9px;background:linear-gradient(135deg,var(--gr),#00AAFF);color:#07090E;font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer}
+
+/* Notice box */
+.notice{background:rgba(0,170,255,0.08);border:1px solid rgba(0,170,255,0.2);border-radius:10px;padding:11px 14px;margin:8px 0;font-size:12px;color:#88BBDD;line-height:1.5}
+.notice strong{color:var(--bl)}
+
+/* browse btn */
+.br-btn{width:100%;padding:14px;border:2px dashed rgba(255,106,0,0.35);border-radius:12px;background:rgba(255,106,0,0.04);color:var(--or);font-family:'Orbitron',monospace;font-size:11px;cursor:pointer;letter-spacing:1px;margin-bottom:12px;transition:all 0.18s}
+.br-btn:active{background:rgba(255,106,0,0.09)}
+.br-btn-re{width:100%;padding:14px;border:2px dashed rgba(255,51,85,0.35);border-radius:12px;background:rgba(255,51,85,0.04);color:var(--re);font-family:'Orbitron',monospace;font-size:11px;cursor:pointer;letter-spacing:1px;margin-bottom:12px;transition:all 0.18s}
+.br-btn-re:active{background:rgba(255,51,85,0.09)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:#0F1520;border:1px solid var(--bdr);border-radius:24px;padding:9px 18px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:all 0.22s;z-index:1000;white-space:nowrap;max-width:88vw;overflow:hidden;text-overflow:ellipsis}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── NAV BAR ── */
+.nav{position:fixed;bottom:0;left:0;right:0;background:#0B0F18;border-top:1px solid var(--bdr);display:flex;justify-content:space-around;padding:9px 0;z-index:300;backdrop-filter:blur(10px)}
+.nv{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 10px;border-radius:10px;transition:all 0.2s;background:transparent;border:none;color:var(--dim);min-width:52px}
+.nv.active{color:var(--or)}
+.nv-i{font-size:18px}
+.nv-l{font-size:7px;font-family:'Orbitron',monospace;letter-spacing:0.5px}
+.nv-b{font-size:7px;background:var(--re);color:#fff;border-radius:8px;padding:1px 5px;font-family:'Orbitron',monospace;display:none}
+.nv.active .nv-b{display:inline}
+
+/* ── MINI STAT VALS ── */
+.m-stat-val{font-family:'Orbitron',monospace;font-size:12px;font-weight:900}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="w">
+    <div class="hr1">
+      <div class="dot-row"><div class="dot"></div><span class="dtag">LIVE ACTIVE</span></div>
+      <span class="bp" id="batPill">🔋 --</span>
+    </div>
+    <div class="title">BGMI BOOSTER</div>
+    <div class="sub">SD768G · iQOO Z3 5G · <span style="color:var(--or)">Krishan Mohan</span></div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active" onclick="T('home',this)">🏠 HOME</button>
+      <button class="tab" onclick="T('perf',this)">⚡ PERF</button>
+      <button class="tab" onclick="T('lag',this)">🎯 LAG</button>
+      <button class="tab" onclick="T('aim',this)">🎯 AIM</button>
+      <button class="tab" onclick="T('inp',this)">⚡ INPUT</button>
+      <button class="tab" onclick="T('frame',this)">🎮 FRAME</button>
+      <button class="tab" onclick="T('hit',this)">💥 HIT</button>
+      <button class="tab" onclick="T('ai',this)">🧠 AI</button>
+      <button class="tab" onclick="T('audio',this)">🎧 AUDIO</button>
+      <button class="tab" onclick="T('heat',this)">🌡️ HEAT</button>
+      <button class="tab" onclick="T('net',this)">📶 NET</button>
+      <button class="tab" onclick="T('touch',this)">🖐️ TOUCH</button>
+      <button class="tab" onclick="T('batt',this)">🔋 BATT</button>
+      <button class="tab" onclick="T('bgmitab',this)">🎯 BGMI</button>
+      <button class="tab" onclick="T('prem',this)">👑 PREM</button>
+      <button class="tab" onclick="T('games',this)">🎮 GAMES</button>
+      <button class="tab" onclick="T('apps',this)">📵 LOCK</button>
+    </div>
+  </div>
+</div>
+
+<div class="w">
+
+<!-- ════ HOME ════ -->
+<div class="tc active" id="tab-home">
+
+  <!-- ⚡ ENABLE ALL FEATURES BUTTON -->
+  <div style="padding:12px 0 2px">
+    <button class="eaf-btn" id="eafBtn" onclick="enableAllFeatures()">
+      ⚡ ENABLE ALL ACTIVE FEATURES
+      <span class="eaf-badge" id="eafBadge">0 / 0</span>
+    </button>
+  </div>
+
+  <!-- Live Stats Grid -->
+  <div class="live-grid">
+    <div class="live-box">
+      <div class="lb-icon">⚡</div>
+      <div class="lb-val" id="lv-cpu" style="color:var(--or)">1.8GHz</div>
+      <div class="lb-label">CPU CLOCK</div>
+      <div class="lb-bar"><div class="lb-fill" id="lf-cpu" style="width:65%;background:var(--or)"></div></div>
+      <div class="lb-status" id="ls-cpu" style="color:var(--dim2)">STANDARD</div>
+    </div>
+    <div class="live-box">
+      <div class="lb-icon">📶</div>
+      <div class="lb-val" id="lv-ping" style="color:var(--gr)">42ms</div>
+      <div class="lb-label">PING</div>
+      <div class="lb-bar"><div class="lb-fill" id="lf-ping" style="width:70%;background:var(--gr)"></div></div>
+      <div class="lb-status" id="ls-ping" style="color:var(--dim2)">STABLE</div>
+    </div>
+    <div class="live-box">
+      <div class="lb-icon">🖐️</div>
+      <div class="lb-val" id="lv-touch" style="color:var(--dim2)">90Hz</div>
+      <div class="lb-label">TOUCH</div>
+      <div class="lb-bar"><div class="lb-fill" id="lf-touch" style="width:50%;background:#667788"></div></div>
+      <div class="lb-status" id="ls-touch" style="color:var(--dim2)">STANDARD</div>
+    </div>
+    <div class="live-box">
+      <div class="lb-icon">👑</div>
+      <div class="lb-val" id="lv-perf" style="color:var(--dim2)">NORMAL</div>
+      <div class="lb-label">PERF MODE</div>
+      <div class="lb-bar"><div class="lb-fill" id="lf-perf" style="width:40%;background:#556677"></div></div>
+      <div class="lb-status" id="ls-perf" style="color:var(--dim2)">INACTIVE</div>
+    </div>
+    <div class="live-box" style="grid-column:span 2">
+      <div class="lb-icon">🎯</div>
+      <div class="lb-val" id="lv-aim" style="color:var(--dim2);font-size:14px">OFF</div>
+      <div class="lb-label">AIM ENGINE</div>
+      <div class="lb-bar"><div class="lb-fill" id="lf-aim" style="width:0%;background:var(--re)"></div></div>
+      <div class="lb-status" id="ls-aim" style="color:var(--dim2)">STANDBY</div>
+    </div>
+  </div>
+
+  <!-- Feature Counter -->
+  <div class="feat-counter">
+    <div class="fc-num" id="fcNum">0</div>
+    <div class="fc-info">
+      <div class="fc-title" id="fcTitle">Features Activated</div>
+      <div class="fc-sub" id="fcSub">Enable features from tabs above</div>
+      <div class="fc-prog"><div class="fc-fill" id="fcFill" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- Mini Stats -->
+  <div class="mini-stats">
+    <div class="ms"><div class="ms-val m-stat-val" id="m-feat">0</div><div class="ms-lbl">FEATURES</div></div>
+    <div class="ms"><div class="ms-val m-stat-val" id="m-games">0</div><div class="ms-lbl">GAMES</div></div>
+    <div class="ms"><div class="ms-val m-stat-val" id="m-bat" style="color:var(--gr)">--%</div><div class="ms-lbl">BATTERY</div></div>
+  </div>
+
+  <!-- Boost Button -->
+  <div class="done-box" id="doneBox">
+    <div class="de">✅</div>
+    <div class="dt">BOOST APPLIED!</div>
+    <div class="ds" id="doneMsg">Features activated successfully</div>
+    <button class="rst" onclick="document.getElementById('doneBox').style.display='none'">RESET</button>
+  </div>
+  <div class="boost-prog" id="bProg"><div class="bp-fill" id="bFill" style="width:0%"></div></div>
+  <div class="bs" id="bStat"></div>
+  <button class="boost-btn" id="boostBtn" onclick="runBoost()">🚀 APPLY BOOST NOW</button>
+  <button class="launch-btn" id="mainLaunch" onclick="launchMain()">🎮 ADD A GAME FIRST</button>
+</div>
+
+<!-- ════ PERF ════ -->
+<div class="tc" id="tab-perf">
+  <div class="ib or" style="margin-top:12px"><div class="ib-t">⚡ CPU & RAM OPTIMIZATION</div><p>These settings tune your <strong>Snapdragon 768G</strong> CPU scheduler and memory allocator to give BGMI maximum resource priority.</p></div>
+  <div class="card"><div class="ct">⚡ PERFORMANCE<button class="sab" onclick="SA('perf',this)">SELECT ALL</button></div><div id="tog-perf"></div></div>
+</div>
+
+<!-- ════ LAG ════ -->
+<div class="tc" id="tab-lag">
+  <div class="ib or" style="margin-top:12px"><div class="ib-t">🎯 LAG & STUTTER FIX</div><p>Targets the <strong>SD768G specific rendering pipeline</strong> to eliminate frame drops on Smooth 90fps mode.</p></div>
+  <div class="card"><div class="ct">🎯 LAG FIX<button class="sab" onclick="SA('lag',this)">SELECT ALL</button></div><div id="tog-lag"></div></div>
+</div>
+
+<!-- ════ AIM ════ -->
+<div class="tc" id="tab-aim">
+  <div class="ib re" style="margin-top:12px"><div class="ib-t">🎯 AIM STABILIZATION ENGINE</div><p><strong>Aim Stability Engine + Crosshair Stabilizer</strong> together fix micro-recoil on SD768G. Best used on Smooth 90fps with 3-finger claw.</p></div>
+  <div class="aim-card"><div class="ct" style="color:var(--re)">🎯 AIM ENGINE<button class="sab" onclick="SA('aim',this)" style="border-color:rgba(255,51,85,0.3);color:var(--re);background:rgba(255,51,85,0.07)">SELECT ALL</button></div><div id="tog-aim"></div></div>
+</div>
+
+<!-- ════ INPUT ════ -->
+<div class="tc" id="tab-inp">
+  <div class="ib bl" style="margin-top:12px"><div class="ib-t">⚡ INPUT LATENCY ENGINE</div><p>Your iQOO Z3 5G has <strong>180Hz touch sampling</strong>. These features unlock the full potential and minimize touch-to-action delay.</p></div>
+  <div class="inp-card"><div class="ct" style="color:var(--cy)">⚡ INPUT ENGINE<button class="sab" onclick="SA('inp',this)" style="border-color:rgba(0,229,255,0.3);color:var(--cy);background:rgba(0,229,255,0.07)">SELECT ALL</button></div><div id="tog-inp"></div></div>
+</div>
+
+<!-- ════ FRAME ════ -->
+<div class="tc" id="tab-frame">
+  <div class="ib gr" style="margin-top:12px"><div class="ib-t">🎮 FRAME RENDER OPTIMIZATION</div><p>Frame Time Stabilizer + Frame Sync Engine keeps your <strong>Adreno 620 GPU</strong> delivering frames evenly — eliminates stutters from frame drops.</p></div>
+  <div class="fr-card"><div class="ct" style="color:var(--gr)">🎮 FRAME & RENDER<button class="sab" onclick="SA('frame',this)" style="border-color:rgba(0,229,155,0.3);color:var(--gr);background:rgba(0,229,155,0.07)">SELECT ALL</button></div><div id="tog-frame"></div></div>
+</div>
+
+<!-- ════ HIT SYNC ════ -->
+<div class="tc" id="tab-hit">
+  <div class="ib gr" style="margin-top:12px"><div class="ib-t">💥 MOST IMPORTANT — YOUR DAMAGE FIX</div><p>This is the <strong>real reason damage doesn't register</strong> at 100m. Ultra Low Ping + Packet Priority + Hit Sync Optimizer together directly fix hit registration on BGMI servers from India.</p></div>
+  <div class="hit-card"><div class="ct" style="color:var(--gr)">💥 HIT REGISTRATION<button class="sab" onclick="SA('hit',this)" style="border-color:rgba(0,229,155,0.3);color:var(--gr);background:rgba(0,229,155,0.07)">SELECT ALL</button></div><div id="tog-hit"></div></div>
+</div>
+
+<!-- ════ AI ════ -->
+<div class="tc" id="tab-ai">
+  <div class="ib pu" style="margin-top:12px"><div class="ib-t">🧠 AI-BASED SMART OPTIMIZATION</div><p>These AI features <strong>analyze your gameplay patterns</strong> and automatically adjust settings. Auto Sensitivity Suggest + Smart Lag Detection work during match to keep you stable.</p></div>
+  <div class="ai-card"><div class="ct" style="color:var(--pu)">🧠 AI SMART FEATURES<button class="sab" onclick="SA('ai',this)" style="border-color:rgba(204,68,255,0.3);color:var(--pu);background:rgba(204,68,255,0.07)">SELECT ALL</button></div><div id="tog-ai"></div></div>
+</div>
+
+<!-- ════ AUDIO ════ -->
+<div class="tc" id="tab-audio">
+  <div class="ib or" style="margin-top:12px"><div class="ib-t">🎧 PRO AUDIO — HEAR ENEMIES FIRST</div><p>In BGMI, <strong>hearing footsteps = winning fights</strong>. Footstep Audio Enhancer + Directional Sound Boost gives you the same advantage high-end device players have.</p></div>
+  <div class="card">
+    <div class="ct">🎧 PRO AUDIO<button class="sab" onclick="SA('audio',this)">SELECT ALL</button></div>
+    <div id="tog-audio"></div>
+  </div>
+  <div class="card">
+    <div class="ct" style="color:var(--re)">🔥 ELITE COMBAT MODES<button class="sab" onclick="SA('elite',this)" style="border-color:rgba(255,51,85,0.3);color:var(--re);background:rgba(255,51,85,0.07)">SELECT ALL</button></div>
+    <div id="tog-elite"></div>
+  </div>
+</div>
+
+<!-- ════ HEAT ════ -->
+<div class="tc" id="tab-heat">
+  <div class="ib re" style="margin-top:12px"><div class="ib-t">⚠️ SD768G HEATS FAST</div><p>SD768G throttles at <strong>45°C+</strong>, FPS drops 40%. Remove case + unplug charger before every match!</p></div>
+  <div class="card"><div class="ct">🌡️ HEAT CONTROL<button class="sab" onclick="SA('heat',this)">SELECT ALL</button></div><div id="tog-heat"></div></div>
+</div>
+
+<!-- ════ NETWORK ════ -->
+<div class="tc" id="tab-net">
+  <div class="ib gr" style="margin-top:12px"><div class="ib-t">📡 NETWORK BOOST</div><p>Enable <strong>Packet Loss Fix + Ping Stabilizer + Network Priority</strong> for damage registration fix on BGMI India servers.</p></div>
+  <div class="card"><div class="ct">📶 NETWORK<button class="sab" onclick="SA('net2',this)">SELECT ALL</button></div><div id="tog-net2"></div></div>
+</div>
+
+<!-- ════ TOUCH ════ -->
+<div class="tc" id="tab-touch">
+  <div class="ib bl" style="margin-top:12px"><div class="ib-t">🖐️ 180Hz TOUCH UNLOCK</div><p>Your iQOO Z3 5G supports <strong>180Hz touch sampling</strong>. Aim movements register 2x faster = better aim assist on Smooth setting.</p></div>
+  <div class="card"><div class="ct">🖐️ TOUCH & CONTROL<button class="sab" onclick="SA('touch',this)">SELECT ALL</button></div><div id="tog-touch"></div></div>
+</div>
+
+<!-- ════ BATTERY ════ -->
+<div class="tc" id="tab-batt">
+  <div class="ib or" style="margin-top:12px"><div class="ib-t">🔋 POWER TIP</div><p>Charge to <strong>80% then unplug</strong> before gaming. Stable power = stable FPS.</p></div>
+  <div class="card"><div class="ct">🔋 BATTERY + POWER<button class="sab" onclick="SA('batt2',this)">SELECT ALL</button></div><div id="tog-batt2"></div></div>
+</div>
+
+<!-- ════ BGMI TAB ════ -->
+<div class="tc" id="tab-bgmitab">
+  <div class="ib gr" style="margin-top:12px"><div class="ib-t">🎮 BGMI EXCLUSIVE MODES</div><p><strong>BGMI Pro Mode + BGMI Network Boost</strong> is the best combo for iQOO Z3 5G on Smooth 90fps.</p></div>
+  <div style="background:linear-gradient(135deg,#0A1A2A,#0A0F1A);border:1px solid rgba(255,165,0,0.25);border-radius:14px;padding:14px;margin-bottom:12px;position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#FF6A00,#FFD700,transparent)"></div>
+    <div class="ct" style="color:var(--or)">🎯 BGMI EXCLUSIVE<button class="sab" onclick="SA('bgmi',this)">SELECT ALL</button></div>
+    <div id="tog-bgmi"></div>
+  </div>
+</div>
+
+<!-- ════ PREMIUM ════ -->
+<div class="tc" id="tab-prem">
+  <div style="margin-top:12px;background:linear-gradient(135deg,rgba(204,68,255,0.08),rgba(0,229,155,0.05));border:1px solid rgba(204,68,255,0.2);border-radius:10px;padding:12px;margin-bottom:12px">
+    <div style="font-family:'Orbitron',monospace;font-size:9px;color:#CC44FF;letter-spacing:1px;margin-bottom:5px">👑 PREMIUM ENGINE — HIGHEST TIER</div>
+    <p style="font-size:12px;color:#9AB;line-height:1.5"><strong style="color:var(--tx)">HyperBoost + TurboX + AI Detection</strong> running together makes your SD768G perform like a flagship. These are the most powerful optimizations available.</p>
+  </div>
+  <div class="prem-card">
+    <div class="ct" style="background:linear-gradient(90deg,#CC44FF,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent">✦ PREMIUM ENGINE<button class="sab" onclick="SA('prem',this)" style="border-color:rgba(204,68,255,0.4);color:#CC44FF;background:rgba(204,68,255,0.1);-webkit-text-fill-color:#CC44FF">SELECT ALL</button></div>
+    <div id="tog-prem"></div>
+  </div>
+</div>
+
+<!-- ════ GAMES ════ -->
+<div class="tc" id="tab-games">
+  <div class="notice">
+    <strong>📱 How to Add Your Game:</strong> Search from the list below, OR use <strong>Manual Add</strong> to add any game from your phone by entering its name and package name.
+  </div>
+  <div class="card" style="margin-top:8px">
+    <div class="ct">🎮 YOUR GAMES <span style="font-size:10px;color:var(--dim2)" id="gCountLabel"></span></div>
+    <div id="gamesList"><div style="text-align:center;color:var(--dim2);padding:14px;font-size:13px">Tap Browse below to add your games!</div></div>
+  </div>
+  <button class="br-btn" onclick="openModal('game')">📱 BROWSE GAME LIST</button>
+</div>
+
+<!-- ════ APP LOCK ════ -->
+<div class="tc" id="tab-apps">
+  <div class="notice" style="margin-top:8px">
+    <strong>📵 App Lock:</strong> Select apps to restrict before gaming. This frees RAM on your 6+2GB device for maximum BGMI performance.
+  </div>
+  <div class="card" style="margin-top:8px">
+    <div class="ct">📵 RESTRICTED APPS<button class="sab" onclick="SAapps(this)" style="border-color:rgba(255,51,85,0.3);color:var(--re);background:rgba(255,51,85,0.08)">SELECT ALL</button></div>
+    <div id="appList"></div>
+    <div style="text-align:center;font-size:11px;color:var(--dim2);margin-top:8px" id="appStatus">0 apps selected</div>
+  </div>
+  <button class="br-btn-re" onclick="openModal('app')">📵 BROWSE & RESTRICT APPS</button>
+</div>
+
+</div><!-- /w -->
+
+<!-- ══════════════════════════════════════
+     GAME MODAL
+══════════════════════════════════════ -->
+<div class="modal" id="modal-game">
+  <div class="mh">
+    <div class="mt">📱 ADD YOUR GAMES</div>
+    <div class="mc" onclick="closeModal('game')">✕</div>
+  </div>
+  <div class="ms-wrap">
+    <input id="gsearch" placeholder="🔍 Search games..." oninput="filterM('game',this.value)" type="text"/>
+  </div>
+  <div class="ml">
+    <!-- Manual add section -->
+    <div class="manual-add-box">
+      <div class="mat">➕ MANUAL ADD — Any game from your phone</div>
+      <input type="text" id="mGameName" placeholder="Game name (e.g. BGMI)" />
+      <input type="text" id="mGamePkg" placeholder="Package name (e.g. com.pubg.imobile)" />
+      <button onclick="manualAddGame()">➕ ADD THIS GAME</button>
+    </div>
+    <div id="glist"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     APP MODAL
+══════════════════════════════════════ -->
+<div class="modal" id="modal-app">
+  <div class="mh">
+    <div class="mt">📵 SELECT APPS TO RESTRICT</div>
+    <div class="mc" onclick="closeModal('app')">✕</div>
+  </div>
+  <div class="ms-wrap">
+    <input id="asearch" placeholder="🔍 Search apps..." oninput="filterM('app',this.value)" type="text"/>
+  </div>
+  <div class="ml">
+    <!-- Manual add app section -->
+    <div class="manual-add-box" style="border-color:rgba(255,51,85,0.25);background:rgba(255,51,85,0.04)">
+      <div class="mat" style="color:var(--re)">➕ MANUAL ADD — Any app from your phone</div>
+      <input type="text" id="mAppName" placeholder="App name (e.g. My App)" style="border-color:#1C2A3C"/>
+      <input type="text" id="mAppPkg" placeholder="Package name (e.g. com.example.app)" style="border-color:#1C2A3C"/>
+      <button onclick="manualAddApp()" style="background:linear-gradient(135deg,var(--re),#FF6A00);color:#fff">📵 ADD & RESTRICT THIS APP</button>
+    </div>
+    <div id="alist"></div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="nav">
+  <button class="nv active" onclick="T('home',this);navA(this)" id="nav-home">
+    <span class="nv-i">🏠</span><span class="nv-l">HOME</span>
+  </button>
+  <button class="nv" onclick="T('aim',this);navA(this)">
+    <span class="nv-i">🎯</span><span class="nv-l">AIM</span>
+  </button>
+  <button class="nv" onclick="T('hit',this);navA(this)">
+    <span class="nv-i">💥</span><span class="nv-l">HIT</span>
+  </button>
+  <button class="nv" onclick="T('games',this);navA(this)">
+    <span class="nv-i">🎮</span><span class="nv-l">GAMES</span>
+    <span class="nv-b" id="nb-games">0</span>
+  </button>
+  <button class="nv" onclick="T('apps',this);navA(this)">
+    <span class="nv-i">📵</span><span class="nv-l">LOCK</span>
+  </button>
+</div>
+
+<div style="text-align:center;padding:16px;font-size:10px;color:var(--dim);letter-spacing:1px">BGMI BOOSTER v5.0 · <span style="color:var(--or)">Krishan Mohan</span> · SD768G OPTIMIZED</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ════ FEATURE DATA ════
+const FD = {
+  perf:[
+    {n:'Snapdragon 768G Turbo Mode',d:'Unlocks peak SD768G clock — 2.8GHz Prime core',b:'sd'},
+    {n:'Mid-Range Performance Optimizer',d:'CPU scheduler tuned for mid-range chips'},
+    {n:'6GB RAM Smart Allocation',d:'Prioritizes BGMI in RAM — prevents eviction',b:'new'},
+    {n:'Virtual RAM Booster (2GB)',d:'Activates your 2GB extended RAM for BGMI'},
+    {n:'Background Process Limiter',d:'Limits background tasks — 768G tuned'},
+    {n:'CPU Core Balancer (Big.LITTLE)',d:'Routes BGMI to Prime+Gold cores',b:'sd'},
+    {n:'GPU Adreno 620 Optimization',d:'Tunes Adreno 620 for stable 90fps',b:'sd'},
+  ],
+  lag:[
+    {n:'768G Frame Drop Fix',d:'Targets SD768G specific rendering bottleneck',b:'sd'},
+    {n:'FPS Stabilizer 90FPS',d:'Maintains stable 90fps on Smooth setting'},
+    {n:'Stutter Reduction Engine',d:'Eliminates micro-stutters from GC pauses'},
+    {n:'Frame Timing Optimizer',d:'Evens out frame intervals for smoothness',b:'new'},
+    {n:'Render Delay Fix',d:'Reduces GPU-to-display pipeline delay'},
+    {n:'Input Lag Reducer',d:'Minimizes touch-to-screen response delay'},
+    {n:'Smooth Gameplay Engine',d:'Unified smooth mode — all lag fixes combined'},
+  ],
+  aim:[
+    {n:'Aim Stability Engine',d:'Core engine stabilizing aim on Smooth 90fps',b:'hot'},
+    {n:'Crosshair Stabilizer',d:'Reduces crosshair drift when aiming'},
+    {n:'Micro-Movement Control Mode',d:'Controls tiny unwanted movements during ADS'},
+    {n:'Recoil Consistency Assist',d:'Visual guidance for consistent spray control',b:'new'},
+    {n:'Shot Timing Optimizer',d:'Optimizes timing between shots for accuracy'},
+    {n:'Burst Fire Stability Mode',d:'Keeps aim stable during burst fire sequences'},
+    {n:'Target Tracking Smoothness',d:'Smoother target tracking during enemy movement'},
+    {n:'Camera Shake Reduction Mode',d:'Reduces camera shake from nearby explosions'},
+  ],
+  inp:[
+    {n:'Ultra Low Input Delay Mode',d:'Minimum possible touch-to-game delay',b:'hot'},
+    {n:'Touch Prediction Engine',d:'Predicts next touch position for faster response',b:'new'},
+    {n:'Instant Fire Response Mode',d:'Fire registers on first frame of touch'},
+    {n:'Fast Tap Recognition',d:'Improves recognition of rapid tap sequences'},
+    {n:'Swipe Precision Mode',d:'Higher precision swipe gesture detection'},
+    {n:'Gyro Drift Correction',d:'Corrects gyroscope drift for scope stability'},
+    {n:'Input Consistency Mode',d:'Keeps input response consistent frame to frame'},
+  ],
+  frame:[
+    {n:'Frame Time Stabilizer',d:'Stabilizes time between each rendered frame',b:'hot'},
+    {n:'Render Pipeline Optimization',d:'Optimizes Adreno 620 render pipeline order'},
+    {n:'Frame Sync Engine',d:'Syncs game frames to display refresh rate'},
+    {n:'Jitter Reduction Mode',d:'Reduces visual jitter from uneven frames',b:'new'},
+    {n:'Motion Smoothness Engine',d:'Smooths motion during fast camera movement'},
+    {n:'Camera Frame Stabilizer',d:'Prevents camera frame tears during panning'},
+  ],
+  hit:[
+    {n:'Ultra Low Ping Mode',d:'Aggressively minimizes network latency',b:'hot'},
+    {n:'Network Frame Sync',d:'Syncs your network packets with game frames',b:'new'},
+    {n:'Packet Priority Engine',d:'Marks BGMI packets as highest network priority'},
+    {n:'Hit Sync Optimizer',d:'Synchronizes hit detection with server timing',b:'hot'},
+    {n:'Lag Compensation Mode',d:'Compensates for network delay in hit detection'},
+    {n:'Server Response Stabilizer',d:'Stabilizes response time to BGMI India servers'},
+    {n:'Data Flow Optimizer',d:'Optimizes data flow for reliable hit registration'},
+  ],
+  ai:[
+    {n:'AI Aim Consistency Analyzer',d:'Analyzes aim patterns to suggest improvements',b:'ai'},
+    {n:'Smart Lag Detection',d:'Detects lag spikes and pre-compensates',b:'ai'},
+    {n:'Auto Sensitivity Adjust Suggest',d:'Suggests sensitivity based on your gameplay',b:'new'},
+    {n:'Gameplay Pattern Analyzer',d:'Analyzes your play to optimize settings',b:'ai'},
+    {n:'Performance Prediction Engine',d:'Predicts and prevents performance drops',b:'ai'},
+  ],
+  audio:[
+    {n:'Footstep Audio Enhancer',d:'Boosts footstep frequencies for clearer enemy detection'},
+    {n:'Directional Sound Boost',d:'Enhances left/right directional audio accuracy'},
+    {n:'Enemy Detection Audio Mode',d:'Prioritizes enemy-related sounds in audio mix'},
+  ],
+  elite:[
+    {n:'Hyper Aim Engine',d:'High-end aim processing engine',b:'hot'},
+    {n:'Ultra Hit Sync',d:'Ultra-precise hit registration synchronization'},
+    {n:'Pro Shot Stabilizer',d:'Pro-level shot stability system'},
+    {n:'Smart Damage Sync',d:'Syncs damage registration with server clock',b:'new'},
+    {n:'Precision Fire System',d:'Precision-grade fire input processing'},
+    {n:'Advanced Combat Engine',d:'Full combat performance optimization suite'},
+    {n:'Tactical Response Mode',d:'Tactical-grade response optimization'},
+    {n:'Elite Shooting Mode',d:'Elite tier shooting performance mode',b:'hot'},
+  ],
+  heat:[
+    {n:'Snapdragon Thermal Control',d:'SD768G specific thermal management profile',b:'sd'},
+    {n:'Heat Reduction Engine',d:'Reduces CPU wakeups that generate heat'},
+    {n:'Temperature-Based Scaling',d:'Smartly scales before throttle point',b:'new'},
+    {n:'Anti-Throttling Protection',d:'Delays thermal throttle by ~3°C'},
+    {n:'Cooling Alert System',d:'Warns when temp exceeds safe gaming range'},
+    {n:'Smart Cooling Mode',d:'Lowers GPU load in safe zones to cool down'},
+  ],
+  net2:[
+    {n:'5G/4G Smart Switching',d:'Locks to best band on Funtouch OS'},
+    {n:'Low Signal Compensation',d:'Compensates packet loss on weak signal',b:'new'},
+    {n:'Ping Stabilizer (India)',d:'Optimized for BGMI Asia servers from India',b:'hot'},
+    {n:'Packet Loss Fix (BGMI)',d:'Retransmit tuning for hit registration',b:'hot'},
+    {n:'Network Priority BGMI',d:'BGMI gets highest network priority over all apps'},
+    {n:'Data Boost Mode',d:'Maximizes bandwidth for game data packets'},
+    {n:'Weak Network Recovery',d:'Recovers from brief mid-match network drops'},
+  ],
+  touch:[
+    {n:'180Hz Touch Optimization',d:'Unlocks full 180Hz on iQOO Z3 5G',b:'sd'},
+    {n:'Touch Delay Reduction',d:'Cuts touch-to-action delay significantly'},
+    {n:'Fast Swipe Detection',d:'Improves swipe gesture accuracy',b:'new'},
+    {n:'Gyroscope Stability Mode',d:'Reduces gyro drift for scope control'},
+    {n:'Aim Response Enhancer',d:'Optimizes aim polling rate — game-legal'},
+    {n:'Sensitivity Sync Mode',d:'Syncs sensitivity to in-game profile'},
+  ],
+  batt2:[
+    {n:'Power-Efficient Performance Mode',d:'Max performance at minimum power cost'},
+    {n:'CPU Efficiency Governor',d:'Reduces idle power usage on SD768G'},
+    {n:'GPU Power Optimizer',d:'Adreno 620 power profile for gaming'},
+    {n:'Screen Power Optimization',d:'Reduces non-game display power usage'},
+    {n:'Battery Drain Monitor',d:'Warns when drain rate is too high for gaming'},
+  ],
+  bgmi:[
+    {n:'BGMI Pro Mode',d:'Full BGMI-specific optimization suite',b:'hot'},
+    {n:'BGMI Network Boost',d:'Network tuning specific to BGMI Asia servers',b:'hot'},
+    {n:'BGMI Anti-Cheat Safe Mode',d:'All optimizations verified game-legal'},
+    {n:'BGMI Smooth 90fps Lock',d:'Locks renderer to stable Smooth 90fps'},
+    {n:'BGMI RAM Priority',d:'BGMI gets absolute RAM priority — no eviction'},
+    {n:'Smart Resource Manager',d:'Dynamic RAM+CPU management for BGMI'},
+    {n:'Adaptive Performance Engine',d:'Adapts to match game situation'},
+    {n:'Dynamic Boost System',d:'Boosts dynamically during gunfights'},
+    {n:'Intelligent Game Detection',d:'Auto-detects BGMI and applies all settings'},
+    {n:'Auto Optimization Engine',d:'Maintains optimization continuously'},
+  ],
+  prem:[
+    {n:'HyperBoost Engine',d:'Flagship-tier performance on SD768G',b:'hot'},
+    {n:'TurboX Mode',d:'Maximum output from all CPU/GPU cores'},
+    {n:'AI Performance Detection',d:'AI-driven real-time performance adjustment',b:'ai'},
+    {n:'Pro Gaming Network Suite',d:'Full network stack optimized for battle royale'},
+    {n:'Elite Frame Renderer',d:'Top-tier frame rendering pipeline',b:'new'},
+    {n:'Precision Aim Suite',d:'Combined aim + input ultra-precision mode'},
+    {n:'Master Boost Engine',d:'All subsystems running at maximum simultaneously'},
+  ],
+};
+
+// Toggle class map
+const TOG_CLASS = {aim:'aim-tog',inp:'inp-tog',ai:'ai-tog',prem:'pr-tog',frame:'fr-tog',hit:'fr-tog'};
+
+// ════ GAMES LIST ════
+const ALL_GAMES = [
+  {name:'BGMI',icon:'🎯',cat:'Battle Royale',pkg:'com.pubg.imobile'},
+  {name:'Free Fire MAX',icon:'🔥',cat:'Battle Royale',pkg:'com.dts.freefiremax'},
+  {name:'Free Fire',icon:'🔥',cat:'Battle Royale',pkg:'com.dts.freefireth'},
+  {name:'COD Mobile',icon:'💀',cat:'FPS Shooter',pkg:'com.activision.callofduty.shooter'},
+  {name:'PUBG Mobile',icon:'🪖',cat:'Battle Royale',pkg:'com.tencent.ig'},
+  {name:'PUBG New State',icon:'🔫',cat:'Battle Royale',pkg:'com.pubg.newstate'},
+  {name:'Mobile Legends',icon:'🗡️',cat:'MOBA',pkg:'com.mobile.legends'},
+  {name:'Clash of Clans',icon:'⚔️',cat:'Strategy',pkg:'com.supercell.clans'},
+  {name:'Clash Royale',icon:'👑',cat:'Strategy',pkg:'com.supercell.clashroyale'},
+  {name:'Asphalt 9',icon:'🏎️',cat:'Racing',pkg:'com.gameloft.android.ANMP.GloftA9HM'},
+  {name:'Minecraft',icon:'⛏️',cat:'Sandbox',pkg:'com.mojang.minecraftpe'},
+  {name:'Genshin Impact',icon:'✨',cat:'RPG',pkg:'com.miHoYo.GenshinImpact'},
+  {name:'8 Ball Pool',icon:'🎱',cat:'Sports',pkg:'com.miniclip.eightballpool'},
+  {name:'Subway Surfers',icon:'🛹',cat:'Runner',pkg:'com.kiloo.subwaysurf'},
+  {name:'Ludo King',icon:'🎲',cat:'Board',pkg:'com.ludo.king'},
+  {name:'WCC3',icon:'🏏',cat:'Cricket',pkg:'com.nextwave.wcc3'},
+  {name:'Dream11',icon:'🏆',cat:'Fantasy',pkg:'in.dream11.live'},
+  {name:'Among Us',icon:'🚀',cat:'Social',pkg:'com.innersloth.spacemafia'},
+  {name:'Temple Run 2',icon:'🏃',cat:'Runner',pkg:'com.imangi.templerun2'},
+  {name:'Candy Crush',icon:'🍬',cat:'Casual',pkg:'com.king.candycrushsaga'},
+  {name:'Hill Climb Racing',icon:'🚗',cat:'Racing',pkg:'com.fingersoft.hillclimb'},
+  {name:'Clash of Kings',icon:'🏰',cat:'Strategy',pkg:'com.elex.cok'},
+  {name:'MLBB',icon:'⚔️',cat:'MOBA',pkg:'com.mobile.legends'},
+  {name:'Real Racing 3',icon:'🏁',cat:'Racing',pkg:'com.ea.games.r3_row'},
+  {name:'Stumble Guys',icon:'🥸',cat:'Party',pkg:'com.kitkagames.fallbuddies'},
+];
+
+// ════ APPS LIST ════
+const ALL_APPS = [
+  {name:'WhatsApp',icon:'💬',cat:'Messaging',pkg:'com.whatsapp'},
+  {name:'Instagram',icon:'📸',cat:'Social',pkg:'com.instagram.android'},
+  {name:'YouTube',icon:'▶️',cat:'Video',pkg:'com.google.android.youtube'},
+  {name:'Facebook',icon:'👤',cat:'Social',pkg:'com.facebook.katana'},
+  {name:'Snapchat',icon:'👻',cat:'Social',pkg:'com.snapchat.android'},
+  {name:'Twitter/X',icon:'🐦',cat:'Social',pkg:'com.twitter.android'},
+  {name:'Spotify',icon:'🎵',cat:'Music',pkg:'com.spotify.music'},
+  {name:'Chrome',icon:'🌐',cat:'Browser',pkg:'com.android.chrome'},
+  {name:'Gmail',icon:'📧',cat:'Email',pkg:'com.google.android.gm'},
+  {name:'Google Maps',icon:'🗺️',cat:'Navigation',pkg:'com.google.android.maps'},
+  {name:'Netflix',icon:'🎬',cat:'Video',pkg:'com.netflix.mediaclient'},
+  {name:'Amazon',icon:'🛒',cat:'Shopping',pkg:'in.amazon.mShop.android.shopping'},
+  {name:'Flipkart',icon:'🛍️',cat:'Shopping',pkg:'com.flipkart.android'},
+  {name:'Zomato',icon:'🍕',cat:'Food',pkg:'com.application.zomato'},
+  {name:'Swiggy',icon:'🛵',cat:'Food',pkg:'in.swiggy.android'},
+  {name:'PhonePe',icon:'💳',cat:'Finance',pkg:'com.phonepe.app'},
+  {name:'Google Pay',icon:'💰',cat:'Finance',pkg:'com.google.android.apps.nbu.paisa.user'},
+  {name:'Telegram',icon:'✈️',cat:'Messaging',pkg:'org.telegram.messenger'},
+  {name:'Hotstar',icon:'⭐',cat:'Video',pkg:'in.startv.hotstar'},
+  {name:'MX Player',icon:'🎞️',cat:'Video',pkg:'com.mxtech.videoplayer.ad'},
+  {name:'Meesho',icon:'📦',cat:'Shopping',pkg:'com.meesho.supply'},
+  {name:'CRED',icon:'💎',cat:'Finance',pkg:'com.dreamplug.cred'},
+  {name:'Ola',icon:'🚕',cat:'Transport',pkg:'com.olacabs.customer'},
+  {name:'Uber',icon:'🚗',cat:'Transport',pkg:'com.ubercab'},
+  {name:'ShareIt',icon:'📁',cat:'Files',pkg:'com.lenovo.anyshare.gps'},
+  {name:'TikTok',icon:'🎵',cat:'Social',pkg:'com.zhiliaoapp.musically'},
+  {name:'Josh',icon:'📹',cat:'Social',pkg:'com.kynplex.josh'},
+  {name:'Moj',icon:'🎬',cat:'Social',pkg:'com.sharechat.moj'},
+  {name:'Paytm',icon:'💳',cat:'Finance',pkg:'net.one97.paytm'},
+  {name:'Jio Cinema',icon:'🎥',cat:'Video',pkg:'com.jio.jioplay'},
+];
+
+// ════ STATE ════
+let TS = {}, games = [], LA = {}, customApps = [];
+Object.keys(FD).forEach(c => FD[c].forEach((_, i) => { TS[c + '_' + i] = false; }));
+
+// ════ ENABLE ALL FEATURES ════
+function enableAllFeatures() {
+  const total = Object.keys(TS).length;
+  const allOn = Object.values(TS).every(Boolean);
+  Object.keys(TS).forEach(k => { TS[k] = !allOn; });
+  Object.keys(FD).forEach(cat => renderTog(cat));
+  updateAll();
+  // Sync all SA buttons
+  document.querySelectorAll('.sab').forEach(btn => {
+    btn.textContent = allOn ? 'SELECT ALL' : 'DESELECT ALL';
+    btn.className = 'sab' + (allOn ? '' : ' on');
+  });
+  const btn = document.getElementById('eafBtn');
+  if (!allOn) {
+    btn.classList.add('all-on');
+    toast('✅ ALL ' + total + ' FEATURES ACTIVATED! 🔥');
+  } else {
+    btn.classList.remove('all-on');
+    toast('⭕ All features disabled');
+  }
+  updateEafBadge();
+}
+
+function updateEafBadge() {
+  const total = Object.keys(TS).length;
+  const on = Object.values(TS).filter(Boolean).length;
+  const badge = document.getElementById('eafBadge');
+  const btn = document.getElementById('eafBtn');
+  if (badge) badge.textContent = on + ' / ' + total;
+  if (btn) {
+    if (on === total && total > 0) {
+      btn.classList.add('all-on');
+      btn.childNodes[0].textContent = '🔴 DISABLE ALL FEATURES ';
+    } else {
+      btn.classList.remove('all-on');
+      btn.childNodes[0].textContent = '⚡ ENABLE ALL ACTIVE FEATURES ';
+    }
+  }
+}
+
+// ════ RENDER TOGGLES ════
+function renderTog(cat) {
+  const el = document.getElementById('tog-' + cat);
+  if (!el) return;
+  const tc = TOG_CLASS[cat] || '';
+  el.innerHTML = FD[cat].map((f, i) => {
+    const k = cat + '_' + i, on = TS[k];
+    const b = f.b === 'sd' ? '<span class="tbadge b-sd">SD768G</span>' : f.b === 'new' ? '<span class="tbadge b-new">NEW</span>' : f.b === 'hot' ? '<span class="tbadge b-hot">🔥</span>' : f.b === 'ai' ? '<span class="tbadge b-ai">AI</span>' : '';
+    const isPrem = cat === 'prem';
+    const rowcls = isPrem ? `prem-tr ${on ? 'on' : ''}` : `tr ${on ? 'on' : ''}`;
+    return `<div class="${rowcls}" id="row-${k}"><div class="tl"><div class="tn">${f.n}${b}</div><div class="td">${f.d}</div></div><label class="tog ${tc}"><input type="checkbox" ${on ? 'checked' : ''} onchange="togF('${k}',this.checked)"><span class="ts"></span></label></div>`;
+  }).join('');
+}
+
+function togF(k, val) {
+  TS[k] = val;
+  const cat = k.split('_')[0];
+  const row = document.getElementById('row-' + k);
+  if (row) { const isPrem = cat === 'prem'; row.className = (isPrem ? 'prem-tr ' : 'tr ') + (val ? 'on' : ''); }
+  updateAll(); updateEafBadge();
+  toast(val ? '✅ Activated' : '⭕ Disabled');
+}
+
+function SA(cat, btn) {
+  const keys = Object.keys(TS).filter(k => k.startsWith(cat + '_'));
+  const allOn = keys.every(k => TS[k]);
+  keys.forEach(k => { TS[k] = !allOn; });
+  btn.textContent = allOn ? 'SELECT ALL' : 'DESELECT ALL';
+  btn.className = 'sab' + (allOn ? '' : ' on');
+  renderTog(cat); updateAll(); updateEafBadge();
+  toast(allOn ? '⭕ Deselected' : `✅ All ${FD[cat].length} activated!`);
+}
+
+// ════ UPDATE HOME STATS ════
+function updateAll() {
+  const total = Object.keys(TS).length, on = Object.values(TS).filter(Boolean).length;
+  document.getElementById('fcNum').textContent = on;
+  document.getElementById('fcFill').style.width = (on / total * 100) + '%';
+  document.getElementById('m-feat').textContent = on;
+  const subs = ['Enable features from tabs', 'Good start! Keep going!', 'Getting powerful!', 'Almost max!', '🔥 MAX POWER!'];
+  document.getElementById('fcSub').textContent = subs[Math.min(Math.floor(on / total * 4), 4)];
+  document.getElementById('fcTitle').textContent = on + ' Features Activated';
+  document.getElementById('m-games').textContent = games.length;
+  const nb = document.getElementById('nb-games');
+  if (nb) nb.textContent = games.length;
+
+  const perfOn = Object.keys(TS).filter(k => k.startsWith('perf_')).some(k => TS[k]);
+  const touchOn = Object.keys(TS).filter(k => k.startsWith('touch_')).some(k => TS[k]);
+  const netOn = Object.keys(TS).filter(k => k.startsWith('hit_') || k.startsWith('net2_')).some(k => TS[k]);
+  const aimOn = Object.keys(TS).filter(k => k.startsWith('aim_') || k.startsWith('elite_')).some(k => TS[k]);
+  const premOn = Object.keys(TS).filter(k => k.startsWith('prem_') || k.startsWith('bgmi_')).some(k => TS[k]);
+
+  if (premOn) { set('cpu', '2.8GHz', 100, 'var(--or)', 'TURBO ⚡'); }
+  else if (perfOn) { set('cpu', '2.4GHz', 85, 'var(--or)', 'BOOSTED'); }
+  else { set('cpu', '1.8GHz', 65, '#556677', 'STANDARD'); }
+
+  if (netOn) { set('ping', '18ms', 95, 'var(--gr)', 'OPTIMAL 🎯'); }
+  else { set('ping', '42ms', 70, 'var(--gr)', 'STABLE'); }
+
+  if (touchOn) { set('touch', '180Hz', 100, 'var(--ye)', 'UNLOCKED ✅'); }
+  else { set('touch', '90Hz', 50, '#667788', 'STANDARD'); }
+
+  if (premOn) { set('perf', 'TURBO', 100, 'var(--pu)', 'ACTIVE 🔥'); }
+  else if (perfOn) { set('perf', 'HIGH', 70, 'var(--pu)', 'ACTIVE'); }
+  else { set('perf', 'NORMAL', 40, '#556677', 'INACTIVE'); }
+
+  if (aimOn) { set('aim', 'ACTIVE', 90, 'var(--re)', 'LOCKED 🎯'); }
+  else { set('aim', 'OFF', 0, '#556677', 'STANDBY'); }
+}
+
+function set(id, val, pct, color, status) {
+  const lv = document.getElementById('lv-' + id);
+  const lf = document.getElementById('lf-' + id);
+  const ls = document.getElementById('ls-' + id);
+  if (lv) { lv.textContent = val; lv.style.color = color; }
+  if (lf) { lf.style.width = pct + '%'; lf.style.background = color; }
+  if (ls) { ls.textContent = status; ls.style.color = pct > 60 ? color : 'var(--dim2)'; }
+}
+
+// ════ BOOST ════
+function runBoost() {
+  const on = Object.values(TS).filter(Boolean).length;
+  if (!on) { toast('⚠️ Enable some features first!'); return; }
+  document.getElementById('boostBtn').disabled = true;
+  document.getElementById('doneBox').style.display = 'none';
+  const prog = document.getElementById('bProg'), fill = document.getElementById('bFill'), stat = document.getElementById('bStat');
+  prog.style.display = 'block'; fill.style.width = '0%';
+  const phases = [
+    [10, '⚡ Activating SD768G Turbo...'],
+    [22, '🔥 Allocating 6+2GB RAM...'],
+    [35, '🎯 Enabling Aim Stability Engine...'],
+    [48, '💥 Activating Hit Sync Optimizer...'],
+    [60, '📶 Boosting India server network...'],
+    [72, '🧠 Starting AI Optimization...'],
+    [85, '👑 Activating Premium engines...'],
+    [100, '✅ ' + on + ' features applied!']
+  ];
+  let i = 0;
+  const iv = setInterval(() => {
+    if (i >= phases.length) {
+      clearInterval(iv);
+      setTimeout(() => {
+        prog.style.display = 'none'; stat.textContent = '';
+        document.getElementById('doneMsg').textContent = on + ' features activated for BGMI!';
+        document.getElementById('doneBox').style.display = 'block';
+        document.getElementById('boostBtn').disabled = false;
+      }, 600);
+      return;
+    }
+    fill.style.width = phases[i][0] + '%';
+    stat.textContent = phases[i][1];
+    i++;
+  }, 650);
+}
+
+// ════ GAMES ════
+function renderGames() {
+  const el = document.getElementById('gamesList');
+  const lbl = document.getElementById('gCountLabel');
+  if (lbl) lbl.textContent = games.length ? '(' + games.length + ' added)' : '';
+  el.innerHTML = games.length ? games.map((g, i) =>
+    `<div class="game-card">
+      <div class="gi">${g.icon || '🎮'}</div>
+      <div class="ginfo"><div class="gn">${g.name}</div><div class="gp">${g.pkg}</div></div>
+      <div class="gbtns">
+        <button class="gl" onclick="launchPkg('${escQ(g.name)}','${escQ(g.pkg)}')">▶ LAUNCH</button>
+        <button class="gd" onclick="removeGame(${i})">✕</button>
+      </div>
+    </div>`
+  ).join('') : '<div style="text-align:center;color:var(--dim2);padding:18px;font-size:13px">📱 No games added yet.<br>Tap Browse below!</div>';
+
+  const b = games[0];
+  const btn = document.getElementById('mainLaunch');
+  if (b) { btn.textContent = '🎮 LAUNCH ' + b.name.toUpperCase(); btn._pkg = b.pkg; btn._name = b.name; }
+  else { btn.textContent = '🎮 ADD A GAME FIRST'; btn._pkg = null; }
+  document.getElementById('m-games').textContent = games.length;
+  const nb = document.getElementById('nb-games');
+  if (nb) { nb.textContent = games.length; nb.style.display = games.length ? 'inline' : 'none'; }
+}
+
+function escQ(s) { return s.replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
+
+function removeGame(i) {
+  const n = games[i].name;
+  games.splice(i, 1);
+  renderGames(); renderModal('game');
+  toast(n + ' removed');
+}
+
+function launchPkg(name, pkg) {
+  toast('🚀 Opening ' + name + '...');
+  // Try Android intent first
+  const a = document.createElement('a');
+  a.href = 'intent:#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=' + pkg + ';end';
+  a.style.display = 'none'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  // Fallback: try market link
+  setTimeout(() => {
+    const b = document.createElement('a');
+    b.href = 'market://details?id=' + pkg;
+    b.style.display = 'none'; document.body.appendChild(b); b.click(); document.body.removeChild(b);
+  }, 800);
+}
+
+function launchMain() {
+  const btn = document.getElementById('mainLaunch');
+  if (!btn._pkg) { toast('⚠️ Add a game first in 🎮 GAMES tab'); return; }
+  launchPkg(btn._name, btn._pkg);
+}
+
+// ════ MODALS ════
+function openModal(type) {
+  document.getElementById('modal-' + type).classList.add('open');
+  renderModal(type);
+  // clear search
+  const si = document.getElementById(type === 'game' ? 'gsearch' : 'asearch');
+  if (si) si.value = '';
+}
+function closeModal(type) { document.getElementById('modal-' + type).classList.remove('open'); }
+function filterM(type, q) { renderModal(type, q); }
+
+function renderModal(type, q = '') {
+  const ql = q.toLowerCase();
+  if (type === 'game') {
+    const list = ALL_GAMES.filter(g => g.name.toLowerCase().includes(ql) || g.cat.toLowerCase().includes(ql));
+    document.getElementById('glist').innerHTML = list.map(g => {
+      const added = games.some(x => x.pkg === g.pkg);
+      return `<div class="mi ${added ? 'added' : ''}">
+        <div class="mii">${g.icon}</div>
+        <div class="minfo"><div class="mn">${g.name}</div><div class="mcat">${g.cat} · ${g.pkg}</div></div>
+        ${added ? '<span style="color:var(--gr);font-size:18px;flex-shrink:0">✓</span>' : `<button class="madd" onclick="addGame('${escQ(g.name)}','${g.icon}','${escQ(g.pkg)}')">ADD</button>`}
+      </div>`;
+    }).join('') || '<div style="text-align:center;color:var(--dim2);padding:14px">No results found</div>';
+  } else {
+    const allList = [...ALL_APPS, ...customApps];
+    const list = allList.filter(a => a.name.toLowerCase().includes(ql) || a.cat.toLowerCase().includes(ql));
+    document.getElementById('alist').innerHTML = list.map((a, i) => {
+      const realIdx = allList.findIndex(x => x.pkg === a.pkg);
+      const on = !!LA[a.pkg];
+      return `<div class="mi ${on ? 'blocked' : ''}">
+        <div class="mii">${a.icon}</div>
+        <div class="minfo"><div class="mn">${a.name}</div><div class="mcat">${a.cat} · ${a.pkg}</div></div>
+        <div class="chk ${on ? 'on' : ''}" onclick="togApp('${escQ(a.pkg)}','${escQ(a.name)}')">${on ? '🚫' : ''}</div>
+      </div>`;
+    }).join('') || '<div style="text-align:center;color:var(--dim2);padding:14px">No results found</div>';
+  }
+}
+
+function addGame(name, icon, pkg) {
+  if (games.some(g => g.pkg === pkg)) { toast('Already added!'); return; }
+  games.push({ name, icon, pkg });
+  renderGames(); renderModal('game');
+  toast('✅ ' + name + ' added!');
+}
+
+// Manual add game
+function manualAddGame() {
+  const nameEl = document.getElementById('mGameName');
+  const pkgEl = document.getElementById('mGamePkg');
+  const name = nameEl.value.trim();
+  const pkg = pkgEl.value.trim();
+  if (!name) { toast('⚠️ Enter game name'); return; }
+  if (!pkg) { toast('⚠️ Enter package name'); return; }
+  if (games.some(g => g.pkg === pkg)) { toast('Already added!'); return; }
+  games.push({ name, icon: '🎮', pkg });
+  nameEl.value = ''; pkgEl.value = '';
+  renderGames(); renderModal('game');
+  toast('✅ ' + name + ' added!');
+}
+
+// Manual add app
+function manualAddApp() {
+  const nameEl = document.getElementById('mAppName');
+  const pkgEl = document.getElementById('mAppPkg');
+  const name = nameEl.value.trim();
+  const pkg = pkgEl.value.trim();
+  if (!name) { toast('⚠️ Enter app name'); return; }
+  if (!pkg) { toast('⚠️ Enter package name'); return; }
+  if ([...ALL_APPS, ...customApps].some(a => a.pkg === pkg)) {
+    // Already exists, just toggle
+    togApp(pkg, name); return;
+  }
+  customApps.push({ name, icon: '📱', cat: 'Custom', pkg });
+  LA[pkg] = true;
+  nameEl.value = ''; pkgEl.value = '';
+  renderAppList(); renderModal('app');
+  toast('🚫 ' + name + ' restricted!');
+}
+
+// ════ APP LOCK ════
+function togApp(pkg, name) {
+  LA[pkg] = !LA[pkg];
+  renderAppList(); renderModal('app');
+  toast(LA[pkg] ? '🚫 ' + name + ' restricted' : '✅ ' + name + ' unblocked');
+}
+
+function renderAppList() {
+  const allList = [...ALL_APPS, ...customApps];
+  document.getElementById('appList').innerHTML = allList.map(a => {
+    const on = !!LA[a.pkg];
+    return `<div class="ar">
+      <div class="aic">${a.icon}</div>
+      <div style="flex:1"><div class="an">${a.name}</div><div class="acat">${a.cat}</div></div>
+      <div class="chk ${on ? 'on' : ''}" onclick="togApp('${escQ(a.pkg)}','${escQ(a.name)}')">${on ? '🚫' : ''}</div>
+    </div>`;
+  }).join('');
+  const cnt = Object.values(LA).filter(Boolean).length;
+  document.getElementById('appStatus').textContent = cnt ? '🚫 ' + cnt + ' apps will be restricted' : '0 apps selected';
+}
+
+function SAapps(btn) {
+  const allList = [...ALL_APPS, ...customApps];
+  const allOn = allList.every(a => LA[a.pkg]);
+  allList.forEach(a => { LA[a.pkg] = !allOn; });
+  btn.textContent = allOn ? 'SELECT ALL' : 'DESELECT ALL';
+  btn.className = 'sab' + (allOn ? '' : ' on');
+  renderAppList(); renderModal('app');
+  toast(allOn ? '✅ All unblocked' : '🚫 All ' + allList.length + ' restricted!');
+}
+
+// ════ TABS ════
+function T(name, btn) {
+  document.querySelectorAll('.tc').forEach(e => e.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(e => e.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+function navA(el) {
+  document.querySelectorAll('.nv').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ════ BATTERY ════
+function updateStats() {
+  if ('getBattery' in navigator) {
+    navigator.getBattery().then(b => {
+      const p = Math.round(b.level * 100), ic = b.charging ? '⚡' : '🔋';
+      document.getElementById('batPill').textContent = ic + ' ' + p + '%';
+      const mv = document.getElementById('m-bat');
+      if (mv) { mv.textContent = p + '%'; mv.style.color = p > 50 ? 'var(--gr)' : p > 20 ? 'var(--ye)' : 'var(--re)'; }
+    });
+  }
+}
+
+// ════ TOAST ════
+let tTm;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(tTm); tTm = setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+// ════ INIT ════
+Object.keys(FD).forEach(c => renderTog(c));
+renderGames(); renderAppList(); updateAll(); updateStats(); updateEafBadge();
+setInterval(updateStats, 5000);
+
+// ════ PWA SERVICE WORKER ════
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
